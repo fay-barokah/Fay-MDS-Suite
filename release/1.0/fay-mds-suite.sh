@@ -198,43 +198,66 @@ workspace_manager() {
 }
 
 check_updates() {
-    # YOUR RAW GITHUB URL (Adjust the path: main/tester or main/stable)
-    # Assuming we're checking the 'tester' version
-    REMOTE_URL="https://raw.githubusercontent.com/fay-barokah/Fay-MDS-Suite/main/release/1.0/fay-mds-suite.sh"
+    # --- SMART UPDATE CONFIGURATION ---
+    # 1. "Pointer" URL (Always fixed, never changes)
+    # This file only contains numbers, e.g., "1.1" or "2.0"
+    VERSION_POINTER="https://raw.githubusercontent.com/fay-barokah/Fay-MDS-Suite/main/LATEST_VERSION"
+    
+    # 2. Base URL Folder Release (Without version number)
+    BASE_RELEASE_URL="https://raw.githubusercontent.com/fay-barokah/Fay-MDS-Suite/main/release"
     
     echo -e "\n${COLOR_CYAN}>>> CHECKING FOR UPDATES <<<${COLOR_NC}"
-    echo "Local Version  : v$SCRIPT_VERSION"
-    echo "Checking GitHub..."
+    echo "Local Version   : $SCRIPT_VERSION"
+    echo "Checking (GitHub)..."
 
-    # Fetch the "Version:" line from GitHub (5 second timeout)
-    REMOTE_INFO=$(curl -s --max-time 5 "$REMOTE_URL" | grep "Version:" | head -n 1)
-    
-    if [[ -z "$REMOTE_INFO" ]]; then
-        echo -e "${COLOR_RED}Error: Could not connect to GitHub or parse version.${COLOR_NC}"
-        echo "Please check your internet connection."
+    # 1. Get the Latest Version Number from the Pointer File
+    # tr -d removes spaces/newlines to keep things clean
+    LATEST_VER=$(curl -s --max-time 5 "$VERSION_POINTER" | tr -d ' \n\r')
+
+    # Validation: If connect fails or file is empty
+    if [[ -z "$LATEST_VER" || "$LATEST_VER" == *"404"* ]]; then
+        echo -e "${COLOR_RED}Error: Could not connect to GitHub or parse version info.${COLOR_NC}"
+        echo "Check internet or repo status."
         pause; return
     fi
+    
+    echo "Remote Version  : $LATEST_VER"
 
-    # Extract version number (eg: 1.2.0)
-    REMOTE_VER=$(echo "$REMOTE_INFO" | awk '{print $3}')
-    
-    echo "Remote Version : v$REMOTE_VER"
-    
-    if [[ "$SCRIPT_VERSION" != "$REMOTE_VER" ]]; then
-        echo -e "\n${COLOR_GREEN}🎉 NEW VERSION AVAILABLE!${COLOR_NC}"
-        echo "Changelog: (Check GitHub Releases)"
+    # 2. Compare Versions (Logic: If Strings Are Not Equal, then Update)
+    if [[ "$SCRIPT_VERSION" != "$LATEST_VER" ]]; then
+        echo -e "\n${COLOR_GREEN}🎉 NEW VERSION AVAILABLE: v$LATEST_VER ${COLOR_NC}"
+        echo -e "Your script will be upgraded to the latest release."
         echo ""
-        read -p "Update now? (This will overwrite the script) (y/n): " up_yn
+        
+        # 3. Dynamic URL Builder
+        # It build the URL based on the numbers it get from GitHub
+        TARGET_URL="$BASE_RELEASE_URL/$LATEST_VER/fay-mds-suite.sh"
+        
+        read -p "Update now? (Overwrite current script) (y/n): " up_yn
         if [[ "$up_yn" == "y" ]]; then
-            echo "Updating..."
-            # Download and overwrite this script file yourself ($0)
-            curl -L "$REMOTE_URL" -o "$0"
+            echo "Downloading update from: Release $LATEST_VER..."
+            
+            # Check first whether the file really exists before overwriting it.
+            HTTP_STATUS=$(curl -o /dev/null --silent --head --write-out '%{http_code}\n' "$TARGET_URL")
+            
+            if [[ "$HTTP_STATUS" != "200" ]]; then
+                echo -e "${COLOR_RED}Critical Error: Version detected ($LATEST_VER) but script file not found in release folder!${COLOR_NC}"
+                echo "Target: $TARGET_URL"
+                pause; return
+            fi
+
+            # Update Execution
+            curl -L "$TARGET_URL" -o "$0"
             chmod +x "$0"
-            echo -e "${COLOR_GREEN}Update Success! Please restart the script.${COLOR_NC}"
-            exit 0
+            
+            echo -e "${COLOR_GREEN}Update Success! Restarting script...${COLOR_NC}"
+            sleep 1
+            exec "$0" # Automatically restart the new script
+        else
+            echo "Update cancelled."
         fi
     else
-        echo -e "\n${COLOR_GREEN}You are using the latest version.${COLOR_NC}"
+        echo -e "\n${COLOR_GREEN}✅ You are using the latest version.${COLOR_NC}"
     fi
     pause
 }
