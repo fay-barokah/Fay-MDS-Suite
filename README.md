@@ -52,7 +52,7 @@ Download the script to your computer. Recommended for frequent use (works offlin
 
 ```bash
 # 1. Download
-curl -sL [https://raw.githubusercontent.com/fay-barokah/Fay-MDS-Suite/main/release/1.0/fay-mds-suite.sh](https://raw.githubusercontent.com/fay-barokah/Fay-MDS-Suite/main/release/1.0/fay-mds-suite.sh) -o fay_mds.sh
+curl -sL https://raw.githubusercontent.com/fay-barokah/Fay-MDS-Suite/main/release/1.0/fay-mds-suite.sh -o fay_mds.sh
 
 # 2. Make Executable
 chmod +x fay_mds.sh
