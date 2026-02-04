@@ -3,12 +3,14 @@
 # ==============================================================================
 #  FAY'S MOLECULAR DYNAMICS SIMULATION SUITE
 #  Version: 1.0 (Ultimate Edition: Smart Config, Edu Corner & Auto-Fix)
-#  Author: Fay
+#  Author : fay-barokah
+#  License: MIT | Copyright (c) 2026 fay-barokah
+#  GitHub : https://github.com/fay-barokah/Fay-MDS-Suite
 #  Description: Automated AmberTools Installer, Manager, and Execution Suite
 # ==============================================================================
 
 # --- GLOBAL CONFIGURATION ---
-SCRIPT_VERSION="1.2.0"  # <--- Change this later when updating to 1.3
+SCRIPT_VERSION="1.0"  # <--- Change this later when updating to 2.0
 AMBER_VERSION="2025"    # <--- Change this when AmberTools26 is released
 AMBER_YEAR="2025"
 FAY_YEAR="2026"
@@ -198,7 +200,7 @@ workspace_manager() {
 check_updates() {
     # YOUR RAW GITHUB URL (Adjust the path: main/tester or main/stable)
     # Assuming we're checking the 'tester' version
-    REMOTE_URL="https://raw.githubusercontent.com/capt-fay/Fay-MDS-Suite/main/tester/fay_mds_suite_tester.sh"
+    REMOTE_URL="https://raw.githubusercontent.com/fay-barokah/Fay-MDS-Suite/main/release/1.0/fay-mds-suite.sh"
     
     echo -e "\n${COLOR_CYAN}>>> CHECKING FOR UPDATES <<<${COLOR_NC}"
     echo "Local Version  : v$SCRIPT_VERSION"
@@ -250,7 +252,7 @@ show_eula() {
     echo ""
     echo -e "${COLOR_YELLOW}LICENSE & COPYRIGHT:${COLOR_NC}"
     echo -e "This software is licensed under the ${BOLD}MIT License${COLOR_NC}."
-    echo "Copyright (c) $FAY_YEAR Fay."
+    echo "Copyright (c) $FAY_YEAR fay-barokah."
     echo "You are free to use, copy, modify, and distribute this software,"
     echo "provided that the original copyright notice is included."
     echo ""
@@ -258,7 +260,7 @@ show_eula() {
     # --- ADDED BACK: OFFICIAL RESOURCES ---
     echo -e "${COLOR_YELLOW}OFFICIAL RESOURCES:${COLOR_NC}"
     echo -e "📂 ${BOLD}Source Code & Updates${COLOR_NC} :"
-    echo -e "   https://github.com/capt-fay/Fay-MDS-Suite"
+    echo -e "   https://github.com/fay-barokah/Fay-MDS-Suite"
     echo -e "   (Please Star ⭐ the repo if you find this useful!)"
     echo ""
     echo -e "💬 ${BOLD}Community & Support${COLOR_NC} :"
@@ -413,12 +415,12 @@ show_citation() {
     echo ""
     echo -e "${COLOR_GREEN}[3] Workflow Automation (This Suite)${COLOR_NC}"
     echo "    Fay MDS Suite (v${SCRIPT_VERSION}). GitHub Repository."
-    echo "    URL: https://github.com/capt-fay/Fay-MDS-Suite"
+    echo "    URL: https://github.com/fay-barokah/Fay-MDS-Suite"
     echo "----------------------------------------------------------------"
     echo -e "${BOLD}Example Acknowledgement:${BOLD}"
     echo "\"Molecular dynamics simulations were performed using AmberTools$AMBER_VERSION"
     echo " (Case et al., $AMBER_YEAR) with GAFF parameters (Wang et al., 2004),"
-    echo " automated via Fay MDS Suite v${SCRIPT_VERSION} (Fay, $FAY_YEAR).\""
+    echo " automated via Fay MDS Suite v${SCRIPT_VERSION} (fay-barokah, $FAY_YEAR).\""
     echo "----------------------------------------------------------------"
     pause
 }
