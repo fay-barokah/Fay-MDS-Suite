@@ -287,7 +287,7 @@ show_eula() {
     echo -e "   (Please Star ⭐ the repo if you find this useful!)"
     echo ""
     echo -e "💬 ${BOLD}Community & Support${COLOR_NC} :"
-    echo -e "   https://discord.gg/ZQCzTHdM43"
+    echo -e "   This project is currently on hiatus and not actively maintained"
     echo ""
     
     # --- CITATION POLICY ---
